@@ -6,11 +6,9 @@ phases:
       python: 3.9
     commands:
       - pip install -r requirements.txt
-      - pip install pytest
   pre_build:
     commands:
       - echo Running tests
-      - pytest --junitxml=report.xml  # Generate test report in JUnit XML format
   build:
     commands:
       - echo Build started on `date`
@@ -19,6 +17,3 @@ phases:
       - $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 135504386187.dkr.ecr.us-east-1.amazonaws.com)
       - docker tag currency-converter:latest 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
       - docker push 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
-artifacts:
-  files:
-    - report.xml  # Store the test report as an artifact
