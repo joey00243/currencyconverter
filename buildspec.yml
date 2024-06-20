@@ -6,9 +6,6 @@ phases:
       python: 3.9
     commands:
       - pip install -r requirements.txt
-  pre_build:
-    commands:
-      - echo Running tests
   build:
     commands:
       - echo Build started on `date`
@@ -21,3 +18,11 @@ phases:
       - docker tag currency-converter:latest 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
       - echo Pushing the Docker image...
       - docker push 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - aws eks update-kubeconfig --region us-east-1 --name currency-converter-cluster
+      - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+      - helm repo update
+      - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
+      - helm upgrade --install currency-converter ./helm/currency-converter --set image.repository=135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter,image.tag=latest

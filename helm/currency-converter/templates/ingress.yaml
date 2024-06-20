@@ -1,3 +1,4 @@
+# templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -6,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: jo-mab.com
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
       - path: /
@@ -15,6 +16,7 @@ spec:
           service:
             name: currency-converter-service
             port:
-              number: 5555
+              number: {{ .Values.service.port }}
+
 
 

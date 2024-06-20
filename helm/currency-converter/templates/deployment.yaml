@@ -1,9 +1,10 @@
+# templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: currency-converter
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: currency-converter
@@ -14,9 +15,9 @@ spec:
     spec:
       containers:
       - name: currency-converter
-        image: 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
-        - containerPort: 5555
+        - containerPort: {{ .Values.service.port }}
         env:
         - name: APIKEY
           valueFrom:
@@ -25,3 +26,4 @@ spec:
               key: APIKEY
         - name: APIHOST
           value: "currency-conversion-and-exchange-rates.p.rapidapi.com"
+

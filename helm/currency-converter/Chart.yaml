@@ -1,0 +1,5 @@
+# Chart.yaml
+apiVersion: v2
+name: currency-converter
+description: A Helm chart for deploying Currency Converter application
+version: 0.1.0

@@ -5,8 +5,8 @@ import os
 app = Flask(__name__)
 
 
-APIKEY = currency-conversion-and-exchange-rates.p.rapidapi.com
-APIHOST = da08122f0emsheb259abe8fa151dp1b937fjsn7a110f3d089e
+APIKEY = os.getenv("APIKEY")
+APIHOST = os.getenv("APIHOST")
 
 url = "https://currency-conversion-and-exchange-rates.p.rapidapi.com/convert"
 headers = {
