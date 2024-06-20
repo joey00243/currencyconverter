@@ -1,43 +1,15 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      python: 3.9
-    commands:
-      - yum install -y curl   # Use yum instead of apt-get for Amazon Linux
-      - curl -LO "https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl"
-      - chmod +x kubectl
-      - mv kubectl /usr/local/bin/
-      - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-      - curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/0.154.0/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-      - mv /tmp/eksctl /usr/local/bin
-
   pre_build:
     commands:
-      - echo Logging in to DockerHub...
-      - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+      - sudo yum remove -y curl
 
   build:
     commands:
-      - echo Build started on `date`
-      - echo Building the Docker image...
-      - docker build -t currency-converter .
-      - echo Tagging the Docker image...
-      - docker tag currency-converter:latest 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
-      - echo Pushing the Docker image to Amazon ECR...
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 135504386187.dkr.ecr.us-east-1.amazonaws.com
-      - docker push 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
+      - echo "Build phase"
 
   post_build:
     commands:
-      - echo Build completed on `date`
-      - aws eks update-kubeconfig --region us-east-1 --name currency-converter-cluster
-      - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-      - helm repo update
-      - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
-      - helm upgrade --install currency-converter ./helm/currency-converter --set image.repository=135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter,image.tag=latest
-
-artifacts:
-  files:
-    - '**/*'
+      - sudo yum install -y curl
+      - curl --version
