@@ -5,9 +5,6 @@ phases:
     runtime-versions:
       python: 3.9
     commands:
-      - python -m venv env
-      - source env/bin/activate
-      - pip install -r requirements.txt
       - apt-get update && apt-get install -y curl
       - curl -LO "https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl"
       - chmod +x kubectl
@@ -15,18 +12,23 @@ phases:
       - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
       - curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/0.154.0/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
       - mv /tmp/eksctl /usr/local/bin
+
+  pre_build:
+    commands:
+      - echo Logging in to DockerHub...
+      - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
       - docker build -t currency-converter .
-      - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 135504386187.dkr.ecr.us-east-1.amazonaws.com
       - echo Tagging the Docker image...
       - docker tag currency-converter:latest 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
-      - echo Pushing the Docker image...
+      - echo Pushing the Docker image to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 135504386187.dkr.ecr.us-east-1.amazonaws.com
       - docker push 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
+
   post_build:
     commands:
       - echo Build completed on `date`
@@ -35,3 +37,7 @@ phases:
       - helm repo update
       - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
       - helm upgrade --install currency-converter ./helm/currency-converter --set image.repository=135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter,image.tag=latest
+
+artifacts:
+  files:
+    - '**/*'
