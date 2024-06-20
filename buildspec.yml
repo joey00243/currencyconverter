@@ -3,7 +3,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - sudo yum remove -y curl
+      - sudo yum remove -y curl --exclude=dnf
 
   build:
     commands:
