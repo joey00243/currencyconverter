@@ -35,7 +35,12 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - export KUBECONFIG=/root/.kube/config  # Explicitly set KUBECONFIG
       - aws eks update-kubeconfig --region us-east-1 --name currency-converter-cluster
+      - cat /root/.kube/config  # Check the content of kubeconfig
+      - kubectl get nodes  # Verify kubectl can access the cluster
+      - kubectl config view  # Verify the kubeconfig context
+      - kubectl config current-context  # Ensure the correct context is set
       - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
       - helm repo update
       - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx
