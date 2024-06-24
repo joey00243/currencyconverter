@@ -4,10 +4,10 @@ kind: Service
 metadata:
   name: currency-converter-service
 spec:
-  type: {{ .Values.service.type }}
+  type: ClusterIP
   selector:
     app: currency-converter
   ports:
-  - port: {{ .Values.service.port }}
-    targetPort: {{ .Values.service.port }}
+  - port: 5555
+    targetPort: 5555
 

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: currency-converter
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app: currency-converter
@@ -15,15 +15,8 @@ spec:
     spec:
       containers:
       - name: currency-converter
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter
         ports:
-        - containerPort: {{ .Values.service.port }}
-        env:
-        - name: APIKEY
-          valueFrom:
-            secretKeyRef:
-              name: api-keys
-              key: APIKEY
-        - name: APIHOST
-          value: "currency-conversion-and-exchange-rates.p.rapidapi.com"
+        - containerPort: 5555
+
 
