@@ -44,15 +44,12 @@ phases:
       - kubectl get nodes  # Verify kubectl can access the cluster
       - kubectl config view  # Verify the kubeconfig context
       - kubectl config current-context  # Ensure the correct context is set
-      - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+      - helm repo add nginx-stable https://helm.nginx.com/stable
       - helm repo update
-      - helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-        --namespace ingress-nginx --create-namespace \
-        --set controller.kind=DaemonSet \
-        --set controller.hostPort.enabled=true \
-        --set controller.ingressClass=nginx
-      - kubectl get pods -n ingress-nginx
-      - helm upgrade --install currency-converter ./helm/currency-converter --set image.repository=135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter,image.tag=latest
+      - helm install nginx-ingress nginx-stable/nginx-ingress --set rbac.create=true
+      - kubectl get pods --all-namespaces
+      - kubectl get services nginx-ingress-controller
+      - helm upgrade --install --force currency-converter ./helm/currency-converter --set image.repository=135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter,image.tag=latest
 
 artifacts:
   files:
