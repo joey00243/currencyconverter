@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: currency-converter
-        image: 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter
+        image: 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
         ports:
         - containerPort: 5555
 
