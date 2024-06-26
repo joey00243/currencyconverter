@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: jo-mab.com
+  - host: currency.jo-mab.com
     http:
       paths:
       - path: /
