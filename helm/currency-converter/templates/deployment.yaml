@@ -18,5 +18,10 @@ spec:
         image: 135504386187.dkr.ecr.us-east-1.amazonaws.com/currency-converter:latest
         ports:
         - containerPort: 5555
+        env:
+        - name: APIKEY
+          value: "ZGEwODEyMmYwZW1zaGViMjU5YWJlOGZhMTUxZHAxYjkzN2Zqc243YTExMGYzZDA4OWU="
+        - name: APIHOST
+          value: "currency-conversion-and-exchange-rates.p.rapidapi.com"
 
 
