@@ -20,7 +20,7 @@ spec:
         - containerPort: 5555
         env:
         - name: APIKEY
-          value: "ZGEwODEyMmYwZW1zaGViMjU5YWJlOGZhMTUxZHAxYjkzN2Zqc243YTExMGYzZDA4OWU="
+          value: "da08122f0emsheb259abe8fa151dp1b937fjsn7a110f3d089e"
         - name: APIHOST
           value: "currency-conversion-and-exchange-rates.p.rapidapi.com"
 
